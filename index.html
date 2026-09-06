@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#07100c">
+<meta name="description" content="Craft Zenith — Minecraft Java & Bedrock">
+<title>Craft Zenith</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+  --bg:#050807;
+  --panel:rgba(13,24,19,.78);
+  --panel2:rgba(18,31,25,.9);
+  --border:rgba(91,255,157,.13);
+  --green:#55f59a;
+  --green2:#2bd879;
+  --text:#f2fff7;
+  --muted:#91a69a;
+  --danger:#ff6b6b;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(52,230,125,.12),transparent 38%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  min-height:100vh;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  width:100%;
+  max-width:620px;
+  margin:auto;
+  min-height:100vh;
+  padding-bottom:80px;
+}
+
+/* HEADER */
+.header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  padding:12px;
+  background:rgba(5,8,7,.82);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--border);
+}
+
+.header-top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:42px;
+  height:42px;
+  flex:none;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,#123f29,#07150e);
+  border:1px solid rgba(85,245,154,.35);
+  box-shadow:0 0 25px rgba(43,216,121,.12);
+}
+
+.logo svg{
+  width:27px;
+  height:27px;
+}
+
+.brand{
+  flex:1;
+  min-width:0;
+}
+
+.brand strong{
+  display:block;
+  font-size:16px;
+}
+
+.brand span{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.menu-scroll{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding-top:11px;
+  scrollbar-width:none;
+}
+
+.menu-scroll::-webkit-scrollbar{
+  display:none;
+}
+
+.nav-btn{
+  flex:none;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.025);
+  color:#a8b9af;
+  padding:8px 12px;
+  border-radius:10px;
+  font-size:12px;
+}
+
+.nav-btn.active{
+  color:#06120b;
+  background:var(--green);
+  border-color:var(--green);
+  font-weight:700;
+}
+
+/* PAGE */
+.page{
+  display:none;
+  padding:15px;
+}
+
+.page.active{
+  display:block;
+}
+
+.hero{
+  padding:22px 17px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:
+    linear-gradient(145deg,rgba(33,71,51,.35),rgba(8,14,11,.8));
+  box-shadow:0 18px 50px rgba(0,0,0,.2);
+}
+
+.hero small{
+  color:var(--green);
+  font-weight:700;
+}
+
+.hero h1{
+  margin:8px 0;
+  font-size:27px;
+  line-height:1.08;
+}
+
+.hero p{
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+}
+
+.section-title{
+  margin:23px 2px 11px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.section-title h2{
+  margin:0;
+  font-size:17px;
+}
+
+.section-title span{
+  color:var(--muted);
+  font-size:11px;
+}
+
+/* PLATFORM */
+.platform-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+}
+
+.platform-card{
+  padding:17px;
+  min-height:130px;
+  border-radius:17px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  transition:.18s;
+}
+
+.platform-card:active{
+  transform:scale(.98);
+}
+
+.platform-icon{
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:rgba(85,245,154,.08);
+  color:var(--green);
+  margin-bottom:12px;
+}
+
+.platform-card strong{
+  display:block;
+  font-size:14px;
+}
+
+.platform-card span{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:5px;
+}
+
+/* SEARCH */
+.search-box{
+  display:flex;
+  gap:8px;
+  margin:14px 0 10px;
+}
+
+.search-box input,
+.filter-select{
+  width:100%;
+  border:1px solid var(--border);
+  outline:none;
+  background:var(--panel);
+  color:var(--text);
+  border-radius:12px;
+  padding:11px 12px;
+}
+
+.search-box input::placeholder{
+  color:#65766b;
+}
+
+.filters{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:13px;
+}
+
+.filter-select{
+  appearance:none;
+}
+
+/* CARDS */
+.catalog-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+}
+
+.mod-card{
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:var(--panel);
+  min-width:0;
+}
+
+.mod-image{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/10;
+  background:#101813;
+  overflow:hidden;
+}
+
+.mod-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.image-placeholder{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  color:#607469;
+  font-size:12px;
+}
+
+.badge{
+  position:absolute;
+  top:8px;
+  left:8px;
+  padding:5px 7px;
+  border-radius:7px;
+  background:rgba(3,9,6,.82);
+  color:var(--green);
+  font-size:9px;
+  font-weight:700;
+  backdrop-filter:blur(8px);
+}
+
+.card-body{
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  min-height:150px;
+}
+
+.card-title{
+  font-size:13px;
+  font-weight:700;
+  line-height:1.3;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+
+.card-meta{
+  margin-top:6px;
+  min-height:31px;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.55;
+}
+
+.card-stats{
+  color:#708278;
+  font-size:9px;
+  margin-top:4px;
+}
+
+.detail-btn{
+  width:100%;
+  margin-top:auto;
+  border:0;
+  border-radius:10px;
+  padding:9px;
+  background:rgba(85,245,154,.1);
+  color:var(--green);
+  font-size:11px;
+  font-weight:700;
+}
+
+.detail-btn:active{
+  background:var(--green);
+  color:#06120b;
+}
+
+/* DETAIL */
+.back-btn{
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:#b7c8bd;
+  border-radius:10px;
+  padding:9px 12px;
+  font-size:12px;
+  margin-bottom:12px;
+}
+
+.detail-cover{
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:17px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  background:#101813;
+}
+
+.detail-cover img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.detail-title{
+  margin:16px 0 5px;
+  font-size:23px;
+  line-height:1.15;
+}
+
+.detail-creator{
+  color:var(--green);
+  font-size:11px;
+}
+
+.detail-info{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:15px;
+}
+
+.info-box{
+  padding:11px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--panel);
+}
+
+.info-box span{
+  display:block;
+  color:#718379;
+  font-size:9px;
+  margin-bottom:4px;
+}
+
+.info-box strong{
+  font-size:11px;
+}
+
+.detail-section{
+  margin-top:19px;
+}
+
+.detail-section h3{
+  margin:0 0 9px;
+  font-size:15px;
+}
+
+.description{
+  padding:14px;
+  border-radius:14px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:#aebdb3;
+  font-size:12px;
+  line-height:1.7;
+  white-space:pre-wrap;
+}
+
+.detail-gallery{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.detail-gallery img{
+  width:100%;
+  aspect-ratio:16/10;
+  object-fit:cover;
+  border-radius:12px;
+  border:1px solid var(--border);
+}
+
+.main-download{
+  width:100%;
+  margin-top:20px;
+  padding:13px;
+  border:0;
+  border-radius:13px;
+  background:var(--green);
+  color:#06120b;
+  font-weight:800;
+  font-size:13px;
+}
+
+/* PREMIUM */
+.premium-head{
+  text-align:center;
+  padding:18px 8px;
+}
+
+.premium-head h1{
+  margin:0 0 8px;
+  font-size:25px;
+}
+
+.premium-head p{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+}
+
+.features{
+  display:grid;
+  gap:8px;
+  margin:15px 0;
+}
+
+.feature{
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:var(--panel);
+  font-size:12px;
+}
+
+.feature::before{
+  content:"✓";
+  color:var(--green);
+  font-weight:900;
+  margin-right:8px;
+}
+
+.plans{
+  display:grid;
+  gap:10px;
+}
+
+.plan{
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:var(--panel);
+}
+
+.plan.recommended{
+  border-color:rgba(85,245,154,.45);
+  box-shadow:0 0 25px rgba(85,245,154,.06);
+}
+
+.plan-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.plan-name{
+  font-weight:700;
+  font-size:14px;
+}
+
+.plan-price{
+  color:var(--green);
+  font-size:18px;
+  font-weight:900;
+}
+
+.plan-desc{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:7px;
+}
+
+/* ACCOUNT */
+.account-card{
+  padding:20px;
+  text-align:center;
+  border-radius:18px;
+  border:1px solid var(--border);
+  background:var(--panel);
+}
+
+.account-avatar{
+  width:62px;
+  height:62px;
+  margin:auto;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:rgba(85,245,154,.09);
+  color:var(--green);
+  font-size:24px;
+  font-weight:900;
+}
+
+.account-card h2{
+  margin:11px 0 4px;
+  font-size:18px;
+}
+
+.account-card p{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.status{
+  display:inline-block;
+  padding:7px 10px;
+  border-radius:9px;
+  background:rgba(255,255,255,.04);
+  color:#9aa9a0;
+  font-size:10px;
+}
+
+/* LANGUAGE */
+.language-list{
+  display:grid;
+  gap:8px;
+}
+
+.language-btn{
+  width:100%;
+  text-align:left;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
+  border-radius:13px;
+  padding:13px;
+  display:flex;
+  justify-content:space-between;
+}
+
+.language-btn.active{
+  border-color:rgba(85,245,154,.5);
+  color:var(--green);
+}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  background:rgba(0,0,0,.65);
+  padding:12px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:100%;
+  max-width:620px;
+  padding:17px;
+  border-radius:20px;
+  background:#0b130f;
+  border:1px solid var(--border);
+  box-shadow:0 -15px 60px rgba(0,0,0,.45);
+}
+
+.modal-box h3{
+  margin:0 0 5px;
+}
+
+.modal-box p{
+  color:var(--muted);
+  font-size:11px;
+  margin:0 0 13px;
+}
+
+.modal-actions{
+  display:grid;
+  gap:8px;
+}
+
+.modal-actions button{
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
+  border-radius:12px;
+  padding:12px;
+}
+
+.modal-actions .primary{
+  background:var(--green);
+  color:#06120b;
+  border-color:var(--green);
+  font-weight:800;
+}
+
+.close-btn{
+  width:100%;
+  margin-top:9px;
+  border:0;
+  background:transparent;
+  color:#728178;
+  padding:8px;
+}
+
+/* DOWNLOAD */
+.ad-banner{
+  min-height:80px;
+  display:grid;
+  place-items:center;
+  border:1px dashed rgba(255,255,255,.12);
+  border-radius:12px;
+  color:#64736a;
+  font-size:10px;
+  margin-bottom:10px;
+}
+
+.countdown{
+  text-align:center;
+  padding:14px;
+  border-radius:13px;
+  background:rgba(85,245,154,.06);
+  color:#b7c7bc;
+  font-size:12px;
+}
+
+.countdown strong{
+  display:block;
+  color:var(--green);
+  font-size:23px;
+  margin-top:5px;
+}
+
+/* STATES */
+.loading,
+.error-box,
+.empty{
+  padding:30px 15px;
+  text-align:center;
+  color:var(--muted);
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:var(--panel);
+  font-size:12px;
+}
+
+.error-box{
+  color:var(--danger);
+}
+
+.load-more{
+  width:100%;
+  margin-top:13px;
+  padding:11px;
+  border-radius:11px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--green);
+  font-size:11px;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* MOBILE ONLY */
+@media(max-width:390px){
+  .catalog-grid{
+    gap:8px;
+  }
+
+  .card-body{
+    padding:10px;
+  }
+
+  .card-title{
+    font-size:12px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="header">
+  <div class="header-top">
+    <div class="logo">
+      <svg viewBox="0 0 40 40" fill="none">
+        <path d="M9 9h22v7H16v4h12v6H16v5h15v7H9V9Z" fill="#55f59a"/>
+      </svg>
+    </div>
+
+    <div class="brand">
+      <strong>Craft Zenith</strong>
+      <span>Minecraft Content</span>
+    </div>
+  </div>
+
+  <div class="menu-scroll">
+    <button class="nav-btn active" data-page="home" onclick="navigate('home')">Home</button>
+    <button class="nav-btn" data-page="bedrock" onclick="navigate('bedrock')">Bedrock</button>
+    <button class="nav-btn" data-page="java" onclick="navigate('java')">Java</button>
+    <button class="nav-btn" data-page="premium" onclick="navigate('premium')">Premium</button>
+    <button class="nav-btn" data-page="language" onclick="navigate('language')">Language</button>
+    <button class="nav-btn" data-page="account" onclick="navigate('account')">Account</button>
+  </div>
+</header>
+
+<!-- HOME -->
+<section class="page active" id="page-home">
+
+  <div class="hero">
+    <small>CRAFT ZENITH</small>
+    <h1>Explore Minecraft Content</h1>
+    <p>
+      Temukan mod, addon, texture pack, map, shader, dan berbagai
+      konten Minecraft Java & Bedrock dalam satu tempat.
+    </p>
+  </div>
+
+  <div class="section-title">
+    <h2>Browse</h2>
+    <span>Choose platform</span>
+  </div>
+
+  <div class="platform-grid">
+    <button class="platform-card" onclick="navigate('bedrock')">
+      <div class="platform-icon">B</div>
+      <strong>Minecraft Bedrock</strong>
+      <span>Addons, texture, maps & more</span>
+    </button>
+
+    <button class="platform-card" onclick="navigate('java')">
+      <div class="platform-icon">J</div>
+      <strong>Minecraft Java</strong>
+      <span>Mods & projects from Modrinth</span>
+    </button>
+  </div>
+
+  <div class="section-title">
+    <h2>Premium</h2>
+    <span>Optional</span>
+  </div>
+
+  <button class="platform-card" style="width:100%;text-align:left" onclick="navigate('premium')">
+    <strong>Craft Zenith Premium</strong>
+    <span>Tanpa iklan • Akses fitur Premium • Dukungan Premium</span>
+  </button>
+
+</section>
+
+<!-- BEDROCK -->
+<section class="page" id="page-bedrock">
+
+  <div class="section-title">
+    <h2>Bedrock</h2>
+    <span id="bedrockCount">—</span>
+  </div>
+
+  <div class="search-box">
+    <input id="bedrockSearch" placeholder="Cari addon, texture, map..." oninput="filterBedrock()">
+  </div>
+
+  <div class="filters">
+    <select id="bedrockCategory" class="filter-select" onchange="filterBedrock()">
+      <option value="">Semua kategori</option>
+      <option value="addons">Addons</option>
+      <option value="texture">Texture Packs</option>
+      <option value="maps">Maps</option>
+      <option value="skins">Skins</option>
+      <option value="shaders">Shaders</option>
+    </select>
+
+    <select id="bedrockVersion" class="filter-select" onchange="filterBedrock()">
+      <option value="">Semua versi</option>
+      <option value="1.26">1.26+</option>
+      <option value="1.21">1.21+</option>
+    </select>
+  </div>
+
+  <div id="bedrockGrid" class="catalog-grid"></div>
+
+</section>
+
+<!-- JAVA -->
+<section class="page" id="page-java">
+
+  <div class="section-title">
+    <h2>Java Mods</h2>
+    <span id="javaCount">Modrinth</span>
+  </div>
+
+  <div class="search-box">
+    <input id="javaSearch" placeholder="Cari Java mod..." oninput="debouncedJavaSearch()">
+  </div>
+
+  <div class="filters">
+    <select id="javaVersion" class="filter-select" onchange="loadJava(true)">
+      <option value="">Versi Minecraft</option>
+      <option value="1.21.10">1.21.10</option>
+      <option value="1.21.9">1.21.9</option>
+      <option value="1.21.8">1.21.8</option>
+      <option value="1.21.7">1.21.7</option>
+      <option value="1.21.6">1.21.6</option>
+      <option value="1.21.5">1.21.5</option>
+      <option value="1.21.4">1.21.4</option>
+      <option value="1.21.3">1.21.3</option>
+      <option value="1.21.2">1.21.2</option>
+      <option value="1.21.1">1.21.1</option>
+    </select>
+
+    <select id="javaLoader" class="filter-select" onchange="loadJava(true)">
+      <option value="">Loader</option>
+      <option value="fabric">Fabric</option>
+      <option value="forge">Forge</option>
+      <option value="neoforge">NeoForge</option>
+      <option value="quilt">Quilt</option>
+    </select>
+  </div>
+
+  <div id="javaGrid" class="catalog-grid"></div>
+
+  <button id="javaMore" class="load-more hidden" onclick="loadJavaMore()">
+    Muat lebih banyak
+  </button>
+
+</section>
+
+<!-- PREMIUM -->
+<section class="page" id="page-premium">
+
+  <div class="premium-head">
+    <h1>Craft Zenith Premium</h1>
+    <p>
+      Nikmati pengalaman Craft Zenith dengan fitur Premium
+      tanpa mengganggu pengalaman browsing.
+    </p>
+  </div>
+
+  <div class="features">
+    <div class="feature">Tanpa iklan</div>
+    <div class="feature">Akses fitur Premium</div>
+    <div class="feature">Dukungan Premium</div>
+  </div>
+
+  <div class="plans">
+
+    <div class="plan">
+      <div class="plan-top">
+        <span class="plan-name">7 Days</span>
+        <span class="plan-price">$0.90</span>
+      </div>
+      <div class="plan-desc">Premium selama 7 hari</div>
+    </div>
+
+    <div class="plan">
+      <div class="plan-top">
+        <span class="plan-name">Monthly</span>
+        <span class="plan-price">$4.99</span>
+      </div>
+      <div class="plan-desc">Premium selama 1 bulan</div>
+    </div>
+
+    <div class="plan">
+      <div class="plan-top">
+        <span class="plan-name">Yearly</span>
+        <span class="plan-price">$9.90</span>
+      </div>
+      <div class="plan-desc">Premium selama 1 tahun</div>
+    </div>
+
+    <div class="plan recommended">
+      <div class="plan-top">
+        <span class="plan-name">Permanent</span>
+        <span class="plan-price">$25</span>
+      </div>
+      <div class="plan-desc">Akses Premium permanen</div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- LANGUAGE -->
+<section class="page" id="page-language">
+
+  <div class="section-title">
+    <h2>Language</h2>
+    <span>Choose language</span>
+  </div>
+
+  <div class="language-list">
+
+    <button class="language-btn active" onclick="setLanguage('id',this)">
+      <span>Bahasa Indonesia</span><span>ID</span>
+    </button>
+
+    <button class="language-btn" onclick="setLanguage('en',this)">
+      <span>English</span><span>EN</span>
+    </button>
+
+    <button class="language-btn" onclick="setLanguage('ja',this)">
+      <span>日本語</span><span>JA</span>
+    </button>
+
+    <button class="language-btn" onclick="setLanguage('ko',this)">
+      <span>한국어</span><span>KO</span>
+    </button>
+
+    <button class="language-btn" onclick="setLanguage('zh',this)">
+      <span>中文</span><span>ZH</span>
+    </button>
+
+    <button class="language-btn" onclick="setLanguage('es',this)">
+      <span>Español</span><span>ES</span>
+    </button>
+
+    <button class="language-btn" onclick="setLanguage('pt',this)">
+      <span>Português</span><span>PT</span>
+    </button>
+
+  </div>
+
+</section>
+
+<!-- ACCOUNT -->
+<section class="page" id="page-account">
+
+  <div class="account-card">
+    <div class="account-avatar">CZ</div>
+    <h2>Craft Zenith Account</h2>
+    <p>Kelola status Premium kamu.</p>
+    <span id="accountStatus" class="status">Free</span>
+  </div>
+
+</section>
+
+<!-- DETAIL -->
+<section class="page" id="page-detail">
+
+  <button class="back-btn" onclick="goBack()">← Kembali</button>
+
+  <div id="detailContent"></div>
+
+</section>
+
+</div>
+
+<!-- DOWNLOAD MODAL -->
+<div class="modal" id="downloadModal">
+
+  <div class="modal-box">
+
+    <h3>Download</h3>
+    <p id="downloadTitle">Menyiapkan download...</p>
+
+    <div id="adBanner" class="ad-banner">
+      Area iklan
+    </div>
+
+    <div id="countdownBox" class="countdown">
+      Tunggu sebelum download
+      <strong id="countdownNumber">15</strong>
+    </div>
+
+    <button id="realDownloadBtn"
+            class="main-download hidden"
+            onclick="performDownload()">
+      Download Sekarang
+    </button>
+
+    <button class="close-btn" onclick="closeDownload()">
+      Tutup
+    </button>
+
+  </div>
+
+</div>
+
+<!-- PLATFORM MODAL -->
+<div class="modal" id="platformModal">
+
+  <div class="modal-box">
+
+    <h3>Welcome to Craft Zenith</h3>
+    <p>Pilih platform Minecraft yang ingin kamu gunakan.</p>
+
+    <div class="modal-actions">
+      <button class="primary" onclick="choosePlatform('bedrock')">
+        Minecraft Bedrock
+      </button>
+
+      <button onclick="choosePlatform('java')">
+        Minecraft Java
+      </button>
+    </div>
+
+    <button class="close-btn" onclick="closePlatformModal()">
+      Tutup
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+"use strict";
+
+/* =====================================================
+   CONFIG
+===================================================== */
+
+const CONFIG = {
+  modrinthApi:"https://api.modrinth.com/v2",
+
+  /*
+    Bedrock dan download membutuhkan backend.
+    Jangan m
